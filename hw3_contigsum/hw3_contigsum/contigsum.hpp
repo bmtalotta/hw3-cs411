@@ -27,10 +27,10 @@ int max(int left, int right) {
 };
 
 template<typename RAIter>
-int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
+int CrossContigSum(RAIter &first, RAIter &middle, RAIter &last) {
     int sum = 0;
     int leftSum = -99999; //dummy val to be overwritten later
-    for (auto i = first; i < middle - 1; i++) {
+   /* for (RAIter i = first; i < middle; i++) {
         sum += *i;
         if (sum > leftSum) {
             leftSum = sum;
@@ -38,8 +38,25 @@ int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
     }
     int rightSum = -99999; //dummy val to be overwritten later
     sum = 0;
-    for (auto i = middle; i < last; i++) {
+    for (RAIter j = middle; j < last; j++) {
+        sum += *j;
+        if (sum > rightSum) {
+            rightSum = sum;
+        }
+    }*/
+    if (middle == first || middle == last) {
+        return max(max(*first, *last), *first + *last);
+    }
+    for (RAIter i = middle; i >= first; i--) {
         sum += *i;
+        if (sum > leftSum) {
+            leftSum = sum;
+        }
+    }
+    int rightSum = -99999; //dummy val to be overwritten later
+    sum = 0;
+    for (RAIter j = middle + 1; j <= last; j++) {
+        sum += *j;
         if (sum > rightSum) {
             rightSum = sum;
         }
@@ -68,7 +85,7 @@ int contigSum(RAIter first, RAIter last)
     contigSum(first, middle);
     contigSum(middle, last);
     int testingAnswer = max(max(contigSum(first, middle), contigSum(middle, last)), CrossContigSum(first, middle, last));
-    cout << testingAnswer << " \n";
+  //cout << testingAnswer << " \n";
     return testingAnswer;
 };
 
