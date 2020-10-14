@@ -45,7 +45,8 @@ void stableMerge(FDIter first, FDIter middle, FDIter last, int &moveCount)
     {
         if (*in2 < *in1) {  // Must do comparison this way, to be stable.
             *out++ = *in2++;
-            moveCount += (in2 - in1);
+            moveCount += (middle - in1);
+          //  cout << moveCount << "\n";
         }
         else {
             *out++ = *in1++;
@@ -58,19 +59,20 @@ void stableMerge(FDIter first, FDIter middle, FDIter last, int &moveCount)
 template<typename FDIter>
 int inversions(FDIter first, FDIter last)
 {
+    int moveCount = 0;
     size_t size = last - first;
     // Compute size of sequence
     if (size <= 1)
         return 0;
     FDIter middle = first;
     advance(middle, size / 2);  // middle is iterator to middle of range
-
     // Recursively sort the two lists
-    inversions(first, middle);
-    inversions(middle, last);
-    int moveCount = 0;
+    moveCount += inversions(first, middle);
+    moveCount += inversions(middle, last);
+    
     // And merge them
     stableMerge(first, middle, last, moveCount);
+    //cout << "at end " << moveCount << "\n";
     return moveCount;
 };
 
