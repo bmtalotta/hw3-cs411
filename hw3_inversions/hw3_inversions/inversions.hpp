@@ -45,7 +45,7 @@ void stableMerge(FDIter first, FDIter middle, FDIter last, int &moveCount)
     {
         if (*in2 < *in1) {  // Must do comparison this way, to be stable.
             *out++ = *in2++;
-            moveCount += (in1 - first);
+            moveCount += (in2 - in1);
         }
         else {
             *out++ = *in1++;

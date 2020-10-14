@@ -1,10 +1,7 @@
 //contigsum.hpp
-
 //Ben Talotta
 //10/13/2020
 //for use in cs411 hw 3 exercise A
-
-
 #include <vector>
 using std::vector;
 #include <cstddef>
@@ -12,8 +9,6 @@ using std::size_t;
 #include <iterator>
 using std::distance;
 using std::advance;
-#include<iostream> //for testing
-using std::cout;
 
 #ifndef contigsum_HPP
 #define contigsum_HPP
@@ -25,33 +20,37 @@ int max(int left, int right) {
         return right;
     }
 };
-
+/* psuedo code guidline I used for creating the function
+   Divide the given array in two halves
+   Return the maximum of following three
+    .a) Maximum subarray sum in left half (Make a recursive call)
+    .b) Maximum subarray sum in right half (Make a recursive call)
+    .c) Maximum subarray sum such that the subarray crosses the midpoint*/
 template<typename RAIter>
 int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
     int sum = 0;
-    int leftSum = -9999;
-    if (middle == last) {
-        cout << "made it here\n";
-        return max(max(*first, *last), *first + *last);
-    }
-    for (RAIter i = middle; i != first - 1; i--) {
+    int leftSum = 0;
+    for (RAIter i = middle; i > first; i--) {
         sum += *i;
         if (sum > leftSum) {
             leftSum = sum;
         }
     }
-    int rightSum = -9999;
+    //the for loop gets angry if going to I>= first so this is the work around
+    sum += *first;
+    if (sum > leftSum) {
+        leftSum = sum;
+    }
+    int rightSum = 0;
     sum = 0;
-    for (RAIter j = middle + 1; j != last; j++) {
+    for (RAIter j = middle+1; j < last; j++) {
         sum += *j;
         if (sum > rightSum) {
             rightSum = sum;
         }
     }
-    sum = 0;
     int total = leftSum + rightSum;
-    cout << leftSum << "+" << rightSum << "=" <<total <<"\n";
-    return max(max(leftSum, rightSum), total);
+    return max(leftSum,max(rightSum,total));
 };
 template<typename RAIter>
 int contigSum(RAIter first, RAIter last)
@@ -61,23 +60,14 @@ int contigSum(RAIter first, RAIter last)
         return 0;
     }
     if (size == 1) {
-        if (*first > 0) {
+        if (*first > 0)
             return *first;
-        }
         else
             return 0;
     }
-    if (size == 2) {
-        return max(*first, max(*last, *first + *last));
-    }
-    // RECURSIVE CASE
     RAIter middle = first;
-    advance(middle, size / 2);  // middle is iterator to middle of range
-    contigSum(first, middle);
-    contigSum(middle, last);
-    int testingAnswer = max(max(contigSum(first, middle), contigSum(middle, last)), CrossContigSum(first, middle, last));
-  //cout << testingAnswer << " \n";
-    return testingAnswer;
+    advance(middle, size / 2);
+    return max(max(contigSum(first, middle), contigSum(middle + 1, last)), CrossContigSum(first, middle, last));;
 };
 
 #endif "!contigsum_HPP"
