@@ -31,7 +31,7 @@ using std::remove_reference;
 #define inversions_HPP
 
 template <typename FDIter>
-void stableMerge(FDIter first, FDIter middle, FDIter last, int &moveCount)
+void stableMerge(FDIter first, FDIter middle, FDIter last, size_t &moveCount)
 {
     // ** C++03:
     using Value = typename std::iterator_traits<FDIter>::value_type;
@@ -57,9 +57,9 @@ void stableMerge(FDIter first, FDIter middle, FDIter last, int &moveCount)
     copy(buffer.begin(), buffer.end(), first);
 };
 template<typename FDIter>
-int inversions(FDIter first, FDIter last)
+size_t inversions(FDIter first, FDIter last)
 {
-    int moveCount = 0;
+    size_t moveCount = 0;
     size_t size = last - first;
     // Compute size of sequence
     if (size <= 1)
