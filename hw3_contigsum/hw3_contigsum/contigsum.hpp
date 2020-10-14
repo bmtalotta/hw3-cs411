@@ -27,35 +27,22 @@ int max(int left, int right) {
 };
 
 template<typename RAIter>
-int CrossContigSum(RAIter &first, RAIter &middle, RAIter &last) {
+int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
     int sum = 0;
-    int leftSum = -99999; //dummy val to be overwritten later
-   /* for (RAIter i = first; i < middle; i++) {
-        sum += *i;
-        if (sum > leftSum) {
-            leftSum = sum;
-        }
-    }
-    int rightSum = -99999; //dummy val to be overwritten later
-    sum = 0;
-    for (RAIter j = middle; j < last; j++) {
-        sum += *j;
-        if (sum > rightSum) {
-            rightSum = sum;
-        }
-    }*/
-    if (middle == first || middle == last) {
+    int leftSum = -9999;
+    if (middle == last) {
+        cout << "made it here\n";
         return max(max(*first, *last), *first + *last);
     }
-    for (RAIter i = middle; i >= first; i--) {
+    for (RAIter i = middle; i != first - 1; i--) {
         sum += *i;
         if (sum > leftSum) {
             leftSum = sum;
         }
     }
-    int rightSum = -99999; //dummy val to be overwritten later
+    int rightSum = -9999;
     sum = 0;
-    for (RAIter j = middle + 1; j <= last; j++) {
+    for (RAIter j = middle + 1; j != last; j++) {
         sum += *j;
         if (sum > rightSum) {
             rightSum = sum;
@@ -63,6 +50,7 @@ int CrossContigSum(RAIter &first, RAIter &middle, RAIter &last) {
     }
     sum = 0;
     int total = leftSum + rightSum;
+    cout << leftSum << "+" << rightSum << "=" <<total <<"\n";
     return max(max(leftSum, rightSum), total);
 };
 template<typename RAIter>
@@ -78,6 +66,9 @@ int contigSum(RAIter first, RAIter last)
         }
         else
             return 0;
+    }
+    if (size == 2) {
+        return max(*first, max(*last, *first + *last));
     }
     // RECURSIVE CASE
     RAIter middle = first;
