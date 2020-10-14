@@ -1,31 +1,19 @@
 //contigsum.hpp
-//**********************************************
-//heavily modified version of merge_sort.cpp
-// Glenn G. Chappell
-// 9 Oct 2015
-//
-// For CS 411/611 Fall 2015
-// Merge Sort using Iterators
-//**********************************************
+
 //Ben Talotta
 //10/13/2020
 //for use in cs411 hw 3 exercise A
 
-#include <iostream>
-using std::cout;
-using std::endl;
-using std::cin;
+
 #include <vector>
 using std::vector;
 #include <cstddef>
 using std::size_t;
-#include <algorithm>
-using std::copy;
 #include <iterator>
 using std::distance;
 using std::advance;
-#include <type_traits>
-using std::remove_reference;
+#include<iostream> //for testing
+using std::cout;
 
 #ifndef contigsum_HPP
 #define contigsum_HPP
@@ -37,15 +25,12 @@ int max(int left, int right) {
         return right;
     }
 };
-int max(int left, int right, int total) {
-    return max(max(left, right), total);
-};
 
 template<typename RAIter>
 int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
     int sum = 0;
     int leftSum = -99999; //dummy val to be overwritten later
-    for (auto i = first; i < middle; i++) {
+    for (auto i = first; i < middle - 1; i++) {
         sum += *i;
         if (sum > leftSum) {
             leftSum = sum;
@@ -59,8 +44,9 @@ int CrossContigSum(RAIter first, RAIter middle, RAIter last) {
             rightSum = sum;
         }
     }
+    sum = 0;
     int total = leftSum + rightSum;
-    return max(leftSum, rightSum, total);
+    return max(max(leftSum, rightSum), total);
 };
 template<typename RAIter>
 int contigSum(RAIter first, RAIter last)
@@ -81,7 +67,9 @@ int contigSum(RAIter first, RAIter last)
     advance(middle, size / 2);  // middle is iterator to middle of range
     contigSum(first, middle);
     contigSum(middle, last);
-    return max(contigSum(first,middle), contigSum(middle, last), CrossContigSum(first, middle, last));
+    int testingAnswer = max(max(contigSum(first, middle), contigSum(middle, last)), CrossContigSum(first, middle, last));
+    cout << testingAnswer << " \n";
+    return testingAnswer;
 };
 
 #endif "!contigsum_HPP"
