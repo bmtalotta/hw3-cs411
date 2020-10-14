@@ -9,7 +9,7 @@
 //**********************************************
 //Ben Talotta
 //10/13/2020
-//for use in cs411 hw 3 exercise A
+//for use in cs411 hw 3 exercise B
 
 #include <iostream>
 using std::cout;
